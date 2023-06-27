@@ -70,7 +70,7 @@
             }
           },
           {
-            "name": "uris",
+            "name": "uri",
             "in": "query",
             "description": "Список uri для которых нужно выгрузить статистику",
             "required": false,
