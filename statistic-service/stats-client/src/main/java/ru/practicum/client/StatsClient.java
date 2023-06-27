@@ -23,7 +23,7 @@ public class StatsClient extends BaseClient {
         super(webClientBuilder.baseUrl(serverUrl).build());
     }
 
-    public ResponseEntity<Object> getStats(LocalDateTime start, LocalDateTime end, List<String> uri, boolean unique) {
+    public ResponseEntity<Object> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
 
         Function<UriBuilder, URI> uriFunction = uriBuilder -> {
             UriBuilder builder = uriBuilder.path("/stats")
@@ -31,9 +31,9 @@ public class StatsClient extends BaseClient {
                     .queryParam("end", end.format(StatsServiceThings.DATE_TIME_FORMATTER))
                     .queryParam("unique", unique);
 
-            if (uri != null && !uri.isEmpty()) {
-                String urisString = String.join(",", uri);
-                builder.queryParam("uri", urisString);
+            if (uris != null && !uris.isEmpty()) {
+                String urisString = String.join(",", uris);
+                builder.queryParam("uris", urisString);
             }
             return builder.build();
         };

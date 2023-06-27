@@ -26,10 +26,10 @@ public class StatsController {
     public List<ViewStats> getStats(
             @DateTimeFormat(pattern = StatsServiceThings.DATE_TIME_FORMAT) @RequestParam LocalDateTime start,
             @DateTimeFormat(pattern = StatsServiceThings.DATE_TIME_FORMAT) @RequestParam LocalDateTime end,
-            @RequestParam(required = false) List<String> uri,
+            @RequestParam(required = false) List<String> uris,
             @RequestParam(required = false) boolean unique) {
-        log.info("Get request [/stats]. Params: {}, {}, {}, {}.", start, end, uri, unique);
-        return statsService.getStats(start, end, uri, unique);
+        log.info("Get request [/stats]. Params: {}, {}, {}, {}.", start, end, uris, unique);
+        return statsService.getStats(start, end, uris, unique);
     }
 
     @PostMapping("/hit")
