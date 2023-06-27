@@ -20,13 +20,13 @@ public class StatsServiceImpl implements StatsService {
     private final StatsRepository statsRepository;
 
     @Override
-    public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end, List<String> uri, boolean unique) {
+    public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
         if (end.isBefore(start)) {
             throw new IllegalArgumentException(String
                     .format("Incorrect time interval, the start=%s cannot be later than end=%s", start, end));
         }
 
-        if (uri == null || uri.isEmpty()) {
+        if (uris == null || uris.isEmpty()) {
             if (unique) {
                 return statsRepository.getAllStatsByDistinctIp(start, end);
             } else {
@@ -34,9 +34,9 @@ public class StatsServiceImpl implements StatsService {
             }
         } else {
             if (unique) {
-                return statsRepository.getStatsByUrisDistinctIps(uri, start, end);
+                return statsRepository.getStatsByUrisDistinctIps(uris, start, end);
             } else {
-                return statsRepository.getStatsByUris(uri, start, end);
+                return statsRepository.getStatsByUris(uris, start, end);
             }
         }
     }
