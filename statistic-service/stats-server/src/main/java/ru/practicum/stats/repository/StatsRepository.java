@@ -3,7 +3,7 @@ package ru.practicum.stats.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import ru.practicum.common.structures.TransferStats;
+import ru.practicum.common.structures.ViewStats;
 import ru.practicum.stats.model.EndpointHit;
 
 import java.time.LocalDateTime;
@@ -18,7 +18,7 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
             "AND st.timestamp BETWEEN :start AND :end " +
             "GROUP BY st.app, st.uri " +
             "ORDER BY COUNT(DISTINCT st.ip) DESC")
-    List<TransferStats> getStatsByUrisDistinctIps(
+    List<ViewStats> getStatsByUrisDistinctIps(
             @Param("uri") List<String> uri,
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end);
@@ -29,7 +29,7 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
             "AND st.timestamp BETWEEN :start AND :end " +
             "GROUP BY st.app, st.uri " +
             "ORDER BY COUNT(st.ip) DESC")
-    List<TransferStats> getStatsByUris(
+    List<ViewStats> getStatsByUris(
             @Param("uri") List<String> uri,
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end);
@@ -39,7 +39,7 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
             "WHERE st.timestamp BETWEEN :start AND :end " +
             "GROUP BY st.app, st.uri " +
             "ORDER BY COUNT(st.ip) DESC")
-    List<TransferStats> getAllStats(
+    List<ViewStats> getAllStats(
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end);
 
@@ -48,7 +48,7 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
             "WHERE st.timestamp BETWEEN :start AND :end " +
             "GROUP BY st.app, st.uri " +
             "ORDER BY COUNT(DISTINCT st.ip) DESC")
-    List<TransferStats> getAllStatsByDistinctIp(
+    List<ViewStats> getAllStatsByDistinctIp(
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end);
 }

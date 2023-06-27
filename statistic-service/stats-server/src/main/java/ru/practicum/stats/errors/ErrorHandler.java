@@ -89,6 +89,15 @@ public class ErrorHandler {
         );
     }
 
+    private String getClassAndMethodName(StackTraceElement[] stackTrace) {
+        if (stackTrace.length > 1) {
+            StackTraceElement element = stackTrace[0];
+            return element.getClassName() + "." + element.getMethodName();
+        } else {
+            return "";
+        }
+    }
+
     @Getter
     @Setter
     @AllArgsConstructor
@@ -102,14 +111,5 @@ public class ErrorHandler {
         private int status;
 
         private String timestamp;
-    }
-
-    private String getClassAndMethodName(StackTraceElement[] stackTrace) {
-        if (stackTrace.length > 1) {
-            StackTraceElement element = stackTrace[0];
-            return element.getClassName() + "." + element.getMethodName();
-        } else {
-            return "";
-        }
     }
 }

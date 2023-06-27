@@ -5,15 +5,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.common.structures.HitDto;
-import ru.practicum.common.structures.TransferStats;
 import ru.practicum.common.StatsServiceThings;
+import ru.practicum.common.structures.HitDto;
+import ru.practicum.common.structures.ViewStats;
+import ru.practicum.stats.sevice.StatsService;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
-
-import ru.practicum.stats.sevice.StatsService;
 
 @Slf4j
 @RestController
@@ -24,7 +23,7 @@ public class StatsController {
 
 
     @GetMapping("/stats")
-    public List<TransferStats> getStats(
+    public List<ViewStats> getStats(
             @DateTimeFormat(pattern = StatsServiceThings.DATE_TIME_FORMAT) @RequestParam LocalDateTime start,
             @DateTimeFormat(pattern = StatsServiceThings.DATE_TIME_FORMAT) @RequestParam LocalDateTime end,
             @RequestParam(required = false) List<String> uri,

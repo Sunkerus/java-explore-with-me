@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.common.structures.HitDto;
-import ru.practicum.common.structures.TransferStats;
+import ru.practicum.common.structures.ViewStats;
 import ru.practicum.stats.mapper.EndpointMapper;
 import ru.practicum.stats.repository.StatsRepository;
 
@@ -20,7 +20,7 @@ public class StatsServiceImpl implements StatsService {
     private final StatsRepository statsRepository;
 
     @Override
-    public List<TransferStats> getStats(LocalDateTime start, LocalDateTime end, List<String> uri, boolean unique) {
+    public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end, List<String> uri, boolean unique) {
         if (end.isBefore(start)) {
             throw new IllegalArgumentException(String
                     .format("Incorrect time interval, the start=%s cannot be later than end=%s", start, end));
