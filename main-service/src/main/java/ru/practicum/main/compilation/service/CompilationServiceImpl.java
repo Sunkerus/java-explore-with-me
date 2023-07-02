@@ -74,8 +74,8 @@ public class CompilationServiceImpl implements CompilationService {
 
 
     @Override
-    public CompilationDto getCompilationByIdAsPublic(Long Id) {
-        Compilation compilation = getCompilationById(Id);
+    public CompilationDto getCompilationByIdAsPublic(Long id) {
+        Compilation compilation = getCompilationById(id);
         return CompilationMapper.toCompilationDtoList(
                 compilation.getEvents().stream().map(Event::getId).collect(Collectors.toSet()),
                 compilation,

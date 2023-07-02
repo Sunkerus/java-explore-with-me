@@ -15,9 +15,7 @@ public interface CompilationService {
 
     void deleteCompilationAsAdmin(Long compId);
 
-    CompilationDto getCompilationByIdAsPublic(Long Id);
+    CompilationDto getCompilationByIdAsPublic(Long id);
 
     List<CompilationDto> getAllCompilationAsPublic(boolean pinned, Pageable pageRequest);
-
-
 }
