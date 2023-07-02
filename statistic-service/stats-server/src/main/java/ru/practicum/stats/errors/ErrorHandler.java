@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -46,16 +47,18 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleIllegalArgumentException(final IllegalArgumentException ex, final WebRequest request) {
+    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(final IllegalArgumentException ex, final WebRequest request) {
         String path = request.getDescription(false).substring(4);
-        log.error("[INVALID DATA]: In: {}. Path: {}; Message: {}.", getClassAndMethodName(ex.getStackTrace()), path, ex.getMessage());
+        log.error("[INVALID DATA]: In: {}. Path: {}; Message: {}.", getClassAndMethodName(ex.getStackTrace()), path, ex);
 
-        return new ErrorResponse(
+        ErrorResponse error = new ErrorResponse(
                 path,
                 LocalDateTime.now().toString(),
                 HttpStatus.BAD_REQUEST.value(),
                 ex.getMessage()
         );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("X-Error-Class", ex.getClass().getSimpleName()).body(error);
     }
 
     @ExceptionHandler
