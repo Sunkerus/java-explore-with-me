@@ -13,7 +13,11 @@ import java.util.function.Function;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class QPredicates {
 
-    private final List<Predicate> predicates =  new ArrayList<>();
+    private final List<Predicate> predicates = new ArrayList<>();
+
+    public static QPredicates build() {
+        return new QPredicates();
+    }
 
     public <T> QPredicates add(T object, Function<T, Predicate> function) {
         if (object != null) {
@@ -37,10 +41,6 @@ public class QPredicates {
 
     public Predicate buildOr() {
         return ExpressionUtils.anyOf(predicates);
-    }
-
-    public static QPredicates build() {
-        return new QPredicates();
     }
 
 }

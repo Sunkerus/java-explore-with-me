@@ -1,11 +1,7 @@
 package ru.practicum.main.event.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import ru.practicum.main.event.enums.EventStateAction;
 import ru.practicum.main.helper.DTFormatter;
 

@@ -357,7 +357,6 @@ public class EventServiceImpl implements EventService {
     }
 
 
-
     public Map<Long, Long> getMapOfShowContext(List<Event> events) {
         Map<Long, Long> statsByEventId = new HashMap<>();
 

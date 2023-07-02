@@ -1,22 +1,9 @@
 package ru.practicum.main.compilation.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import ru.practicum.main.event.model.Event;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Getter
@@ -41,7 +28,7 @@ public class Compilation {
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "compilation_event",
-    joinColumns = @JoinColumn(name = "compilation_id", referencedColumnName = "id"),
-    inverseJoinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"))
+            joinColumns = @JoinColumn(name = "compilation_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"))
     private List<Event> events;
 }

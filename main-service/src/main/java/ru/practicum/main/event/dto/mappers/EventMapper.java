@@ -52,19 +52,27 @@ public class EventMapper {
     }
 
     public EventFullDto toFullDto(Event event) {
-        return halfBuild(event).views(0L).build();
+        return  EventFullDto.builder()
+                .annotation(event.getAnnotation())
+                .category(CategoryMapper.toDto(event.getCategory()))
+                .confirmedRequests(event.getConfirmedRequests())
+                .createdOn(event.getCreatedOn().format(DTFormatter.DATE_TIME_FORMATTER))
+                .description(event.getDescription())
+                .eventDate(event.getEventDate().format(DTFormatter.DATE_TIME_FORMATTER))
+                .id(event.getId())
+                .initiator(UserMapper.tUserShortDto(event.getInitiator()))
+                .location(LocationMapper.toDto(event.getLocation()))
+                .paid(event.isPaid())
+                .participantLimit(event.getParticipantLimit())
+                .publishedOn(event.getPublishedOn() != null ? event.getPublishedOn()
+                        .format(DTFormatter.DATE_TIME_FORMATTER) : null)
+                .requestModeration(event.isRequestModeration())
+                .state(event.getState())
+                .title(event.getTitle())
+                .views(0L).build();
     }
 
     public EventFullDto toFullDto(Event event, Long views) {
-        return halfBuild(event).views(views).build();
-
-    }
-
-    public EventFullDto toEventFullDto(Event event, Map<Long, Long> views) {
-        return EventMapper.toFullDto(event, views.getOrDefault(event.getId(), 0L));
-    }
-
-    private EventFullDto.EventFullDtoBuilder halfBuild(Event event) {
         return EventFullDto.builder()
                 .annotation(event.getAnnotation())
                 .category(CategoryMapper.toDto(event.getCategory()))
@@ -81,6 +89,14 @@ public class EventMapper {
                         .format(DTFormatter.DATE_TIME_FORMATTER) : null)
                 .requestModeration(event.isRequestModeration())
                 .state(event.getState())
-                .title(event.getTitle());
+                .title(event.getTitle())
+                .views(views).build();
+
     }
+
+    public EventFullDto toEventFullDto(Event event, Map<Long, Long> views) {
+        return EventMapper.toFullDto(event, views.getOrDefault(event.getId(), 0L));
+    }
+
+
 }

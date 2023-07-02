@@ -18,19 +18,18 @@ import java.util.List;
 public class StatsService {
 
     private final StatsClient statisticsClient;
-
+    private final ObjectMapper mapper;
     @Value("${app.name}")
     private String appName;
-
-    private final ObjectMapper mapper;
 
     public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
 
         ResponseEntity<Object> stats = statisticsClient.getStats(start, end, uris, unique);
-        return mapper.convertValue(stats.getBody(), new TypeReference<>() {});
+        return mapper.convertValue(stats.getBody(), new TypeReference<>() {
+        });
     }
 
     public void addHit(HttpServletRequest request) {
-        statisticsClient.addHit(appName,request.getRemoteAddr(), request.getRequestURI(), LocalDateTime.now());
+        statisticsClient.addHit(appName, request.getRemoteAddr(), request.getRequestURI(), LocalDateTime.now());
     }
 }

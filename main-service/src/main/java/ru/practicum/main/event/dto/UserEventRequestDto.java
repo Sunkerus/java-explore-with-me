@@ -1,12 +1,7 @@
 package ru.practicum.main.event.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import ru.practicum.main.event.enums.EventStateAction;
 import ru.practicum.main.helper.DTFormatter;
 
@@ -27,7 +22,7 @@ public class UserEventRequestDto {
 
     private Long category;
 
-    @Size(min = 20, max = 7000,message = "Description size must be between 20 and 7000")
+    @Size(min = 20, max = 7000, message = "Description size must be between 20 and 7000")
     private String description;
 
     @JsonFormat(pattern = DTFormatter.YYYY_MM_DD_HH_MM_SS, shape = JsonFormat.Shape.STRING)

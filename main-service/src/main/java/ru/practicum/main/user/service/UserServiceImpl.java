@@ -5,12 +5,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.main.exeption.NotFoundException;
+import ru.practicum.main.helper.FurtherPageRequest;
 import ru.practicum.main.user.dto.NewUserRequest;
 import ru.practicum.main.user.dto.UserDto;
 import ru.practicum.main.user.mapper.UserMapper;
 import ru.practicum.main.user.model.User;
 import ru.practicum.main.user.repository.UserRepository;
-import ru.practicum.main.helper.FurtherPageRequest;
 
 import java.util.List;
 

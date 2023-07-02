@@ -11,6 +11,7 @@ public class FurtherPageRequest extends PageRequest {
         super(from, size, Sort.unsorted());
         this.from = from;
     }
+
     public FurtherPageRequest(int from, int size, Sort sort) {
         super(from, size, sort);
         this.from = from;

@@ -27,20 +27,6 @@ public class EventRequest {
     private Integer from;
     private Integer size;
 
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    public static class AdminRequest {
-
-        private List<Long> users;
-        private List<EventState> states;
-        private List<Long> categories;
-        private LocalDateTime rangeStart;
-        private LocalDateTime rangeEnd;
-        private Integer from;
-        private Integer size;
-    }
-
     public static EventRequest of(
             HttpServletRequest request,
             String text,
@@ -67,7 +53,6 @@ public class EventRequest {
         return eventRequest;
     }
 
-
     public static AdminRequest ofAdmin(
             List<Long> users,
             List<EventState> states,
@@ -86,5 +71,19 @@ public class EventRequest {
         adminRequest.setSize(size);
 
         return adminRequest;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class AdminRequest {
+
+        private List<Long> users;
+        private List<EventState> states;
+        private List<Long> categories;
+        private LocalDateTime rangeStart;
+        private LocalDateTime rangeEnd;
+        private Integer from;
+        private Integer size;
     }
 }

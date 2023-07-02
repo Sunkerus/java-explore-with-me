@@ -1,11 +1,7 @@
 package ru.practicum.main.compilation.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.practicum.main.compilation.dto.CompilationDto;
 import ru.practicum.main.compilation.service.CompilationService;
 import ru.practicum.main.helper.FurtherPageRequest;
@@ -28,7 +24,7 @@ public class CompilationPublicController {
 
     @GetMapping
     public List<CompilationDto> getAllCompilations(
-            @RequestParam(defaultValue = "false")boolean pinned,
+            @RequestParam(defaultValue = "false") boolean pinned,
             @RequestParam(defaultValue = "0") @Min(0) int from,
             @RequestParam(defaultValue = "10") @Max(1) int size) {
         return compilationService.getAllCompilationAsPublic(pinned, new FurtherPageRequest(from, size));

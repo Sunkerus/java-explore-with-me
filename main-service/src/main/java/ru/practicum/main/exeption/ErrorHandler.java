@@ -23,8 +23,6 @@ import java.util.stream.Collectors;
 public class ErrorHandler {
 
 
-
-
     private String toString(Exception ex) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
@@ -164,7 +162,6 @@ public class ErrorHandler {
             this.timestamp = timestamp;
         }
     }
-
 
 
 }
