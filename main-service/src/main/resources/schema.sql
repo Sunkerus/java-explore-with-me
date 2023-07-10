@@ -38,7 +38,6 @@ CREATE TABLE IF NOT EXISTS events
     initiator_id       BIGINT REFERENCES users (id) ON DELETE CASCADE,
     paid               BOOLEAN DEFAULT FALSE,
     participant_limit  INT     DEFAULT 0,
-    confirmed_requests INTEGER,
     request_moderation BOOLEAN DEFAULT TRUE,
     state              VARCHAR(12)                                     NOT NULL,
     title              VARCHAR(120) CHECK (LENGTH(title) >= 3)         NOT NULL

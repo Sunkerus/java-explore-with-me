@@ -20,6 +20,11 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
 
+    @Override
+    public CategoryRepository getCategoryRepository() {
+        return this.categoryRepository;
+    }
+
 
     @Transactional
     @Override
@@ -30,25 +35,22 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     @Override
     public void deleteCategoryAsAdmin(Long catId) {
-        getCategoryById(catId);
+        categoryRepository.findById(catId)
+                .orElseThrow(() -> new NotFoundException(String.format("Category with id: %d cannot found", catId)));
         categoryRepository.deleteById(catId);
     }
 
     @Transactional
     @Override
     public CategoryDto patchCategoryAsAdmin(CategoryDto categoryDto, Long catId) {
-        Category category = categoryRepository.getReferenceById(catId);
+        Category category = categoryRepository.findById(catId).orElseThrow(() -> {
+            throw new NotFoundException(String.format("Category with this id: %d cannot found", catId));
+        });
         if (categoryDto.getName() != null) {
             category.setName(categoryDto.getName());
         }
 
         return CategoryMapper.toDto(categoryRepository.save(category));
-    }
-
-    @Override
-    public Category getCategoryById(Long catId) {
-        return categoryRepository.findById(catId)
-                .orElseThrow(() -> new NotFoundException(String.format("Category with id: %d cannot found", catId)));
     }
 
     @Override
@@ -58,6 +60,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto getCategoryByIdAsPublic(Long catId) {
-        return CategoryMapper.toDto(getCategoryById(catId));
+        return CategoryMapper.toDto(categoryRepository.findById(catId)
+                .orElseThrow(() -> new NotFoundException(String.format("Category with id: %d cannot found", catId))));
     }
 }

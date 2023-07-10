@@ -6,7 +6,6 @@ import ru.practicum.main.compilation.dto.CompilationDto;
 import ru.practicum.main.compilation.service.CompilationService;
 import ru.practicum.main.helper.FurtherPageRequest;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class CompilationPublicController {
     public List<CompilationDto> getAllCompilations(
             @RequestParam(defaultValue = "false") boolean pinned,
             @RequestParam(defaultValue = "0") @Min(0) int from,
-            @RequestParam(defaultValue = "10") @Max(1) int size) {
+            @RequestParam(defaultValue = "10") int size) {
         return compilationService.getAllCompilationAsPublic(pinned, new FurtherPageRequest(from, size));
     }
 

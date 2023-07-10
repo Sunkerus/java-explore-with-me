@@ -42,17 +42,15 @@ public class PublicEventController {
             @RequestParam(defaultValue = "0") int from,
             @RequestParam(defaultValue = "10") int size,
             HttpServletRequest request) {
-        return eventService.getAllEventsAsPublic(
+        return eventService.getAllEventsAsPublic(request, from, size,
                 EventRequest.of(
-                        request,
                         text,
                         categories,
                         paid,
                         rangeStart,
                         rangeEnd,
                         onlyAvailable,
-                        sort,
-                        from, size));
+                        sort));
     }
 
 }

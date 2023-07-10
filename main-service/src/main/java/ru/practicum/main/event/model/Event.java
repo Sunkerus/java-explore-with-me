@@ -77,7 +77,4 @@ public class Event {
     @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
     private Set<Request> requests;
 
-    @Column(name = "confirmed_requests")
-    private Integer confirmedRequests;
-
 }

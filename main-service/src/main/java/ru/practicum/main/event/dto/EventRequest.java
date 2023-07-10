@@ -6,7 +6,6 @@ import lombok.Setter;
 import ru.practicum.main.event.enums.EventSortType;
 import ru.practicum.main.event.enums.EventState;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,9 +13,6 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class EventRequest {
-
-
-    private HttpServletRequest request;
     private String text;
     private List<Long> categories;
     private Boolean paid;
@@ -24,25 +20,17 @@ public class EventRequest {
     private LocalDateTime rangeEnd;
     private boolean onlyAvailable;
     private EventSortType sort;
-    private Integer from;
-    private Integer size;
 
     public static EventRequest of(
-            HttpServletRequest request,
             String text,
             List<Long> categories,
             Boolean paid,
             LocalDateTime rangeStart,
             LocalDateTime rangeEnd,
             boolean onlyAvailable,
-            EventSortType sort,
-            Integer from,
-            Integer size) {
+            EventSortType sort) {
         EventRequest eventRequest = new EventRequest();
-        eventRequest.setRequest(request);
-        eventRequest.setFrom(from);
         eventRequest.setPaid(paid);
-        eventRequest.setSize(size);
         eventRequest.setOnlyAvailable(onlyAvailable);
         eventRequest.setText(text);
         eventRequest.setRangeEnd(rangeEnd);

@@ -4,9 +4,10 @@ import lombok.experimental.UtilityClass;
 import ru.practicum.main.compilation.model.Compilation;
 import ru.practicum.main.event.dto.EventShortDto;
 import ru.practicum.main.event.model.Event;
-import ru.practicum.main.event.service.EventService;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -30,26 +31,16 @@ public class CompilationMapper {
                 .build();
     }
 
-    public CompilationDto toCompilationDtoList(Set<Long> eventIds, Compilation compilation, EventService eventService) {
-
-        if (eventIds != null) {
-            return CompilationMapper.toDto(compilation, eventService.getEventsLikeShortDto(eventIds));
-        }
-        return CompilationMapper.toDto(compilation, new ArrayList<>());
+    public CompilationDto toCompilationDtoList(Compilation compilation, List<EventShortDto> eventShortList) {
+        return CompilationMapper.toDto(compilation, eventShortList);
     }
 
-    public List<CompilationDto> toCompilationDtoList(List<Compilation> compilations, EventService eventService) {
+    public List<CompilationDto> toCompilationDtoList(List<Compilation> compilations, List<EventShortDto> eventShortList) {
         if (compilations.isEmpty()) {
             return Collections.emptyList();
         }
 
-        Set<Long> eventIds = compilations
-                .stream().flatMap(compilation -> compilation.getEvents()
-                        .stream()
-                        .map(Event::getId))
-                .collect(Collectors.toSet());
-
-        Map<Long, EventShortDto> eventsMap = eventService.getEventsLikeShortDto(eventIds).stream()
+        Map<Long, EventShortDto> eventsMap = eventShortList.stream()
                 .collect(Collectors.toMap(EventShortDto::getId, Function.identity()));
 
         return compilations.stream()

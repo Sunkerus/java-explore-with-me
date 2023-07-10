@@ -33,34 +33,32 @@ public class EventMapper {
                 .requestModeration(newEventDto.isRequestModeration())
                 .title(newEventDto.getTitle())
                 .initiator(user)
-                .confirmedRequests(0)
                 .build();
     }
 
-    public static EventShortDto toShortDto(Event event, Long views) {
+    public static EventShortDto toShortDto(Event event, Long views, Integer confirmedRequests) {
         return EventShortDto.builder()
                 .id(event.getId())
                 .eventDate(event.getEventDate().format(DTFormatter.DATE_TIME_FORMATTER))
                 .title(event.getTitle())
                 .paid(event.isPaid())
+                .confirmedRequests(confirmedRequests)
                 .annotation(event.getAnnotation())
                 .category(CategoryMapper.toDto(event.getCategory()))
-                .confirmedRequests(event.getConfirmedRequests())
                 .views(views)
-                .initiator(UserMapper.tUserShortDto(event.getInitiator()))
+                .initiator(UserMapper.toUserShortDto(event.getInitiator()))
                 .build();
     }
 
     public EventFullDto toFullDto(Event event) {
-        return  EventFullDto.builder()
+        return EventFullDto.builder()
                 .annotation(event.getAnnotation())
                 .category(CategoryMapper.toDto(event.getCategory()))
-                .confirmedRequests(event.getConfirmedRequests())
                 .createdOn(event.getCreatedOn().format(DTFormatter.DATE_TIME_FORMATTER))
                 .description(event.getDescription())
                 .eventDate(event.getEventDate().format(DTFormatter.DATE_TIME_FORMATTER))
                 .id(event.getId())
-                .initiator(UserMapper.tUserShortDto(event.getInitiator()))
+                .initiator(UserMapper.toUserShortDto(event.getInitiator()))
                 .location(LocationMapper.toDto(event.getLocation()))
                 .paid(event.isPaid())
                 .participantLimit(event.getParticipantLimit())
@@ -72,16 +70,16 @@ public class EventMapper {
                 .views(0L).build();
     }
 
-    public EventFullDto toFullDto(Event event, Long views) {
+    public EventFullDto toFullDto(Event event, Long views, Integer confirmedRequests) {
         return EventFullDto.builder()
                 .annotation(event.getAnnotation())
                 .category(CategoryMapper.toDto(event.getCategory()))
-                .confirmedRequests(event.getConfirmedRequests())
                 .createdOn(event.getCreatedOn().format(DTFormatter.DATE_TIME_FORMATTER))
                 .description(event.getDescription())
                 .eventDate(event.getEventDate().format(DTFormatter.DATE_TIME_FORMATTER))
                 .id(event.getId())
-                .initiator(UserMapper.tUserShortDto(event.getInitiator()))
+                .confirmedRequests(confirmedRequests)
+                .initiator(UserMapper.toUserShortDto(event.getInitiator()))
                 .location(LocationMapper.toDto(event.getLocation()))
                 .paid(event.isPaid())
                 .participantLimit(event.getParticipantLimit())
@@ -94,8 +92,8 @@ public class EventMapper {
 
     }
 
-    public EventFullDto toEventFullDto(Event event, Map<Long, Long> views) {
-        return EventMapper.toFullDto(event, views.getOrDefault(event.getId(), 0L));
+    public EventFullDto toEventFullDto(Event event, Map<Long, Long> views, Integer confirmedRequests) {
+        return EventMapper.toFullDto(event, views.getOrDefault(event.getId(), 0L), confirmedRequests);
     }
 
 

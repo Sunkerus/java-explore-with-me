@@ -23,13 +23,6 @@ import java.util.stream.Collectors;
 public class ErrorHandler {
 
 
-    private String toString(Exception ex) {
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        ex.printStackTrace(pw);
-        return sw.toString();
-    }
-
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorOfApi handleMethodArgumentNotValidException(final MethodArgumentNotValidException ex) {
@@ -141,18 +134,25 @@ public class ErrorHandler {
         );
     }
 
+    private String toString(Exception ex) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        ex.printStackTrace(pw);
+        return sw.toString();
+    }
+
     @Getter
     private static class ErrorOfApi {
 
-        private String status;
+        private final String status;
 
-        private String reason;
+        private final String reason;
 
-        private String message;
+        private final String message;
 
-        private String errors;
+        private final String errors;
 
-        private String timestamp;
+        private final String timestamp;
 
         public ErrorOfApi(String status, String reason, String message, String errors, String timestamp) {
             this.status = status;
@@ -162,6 +162,5 @@ public class ErrorHandler {
             this.timestamp = timestamp;
         }
     }
-
 
 }

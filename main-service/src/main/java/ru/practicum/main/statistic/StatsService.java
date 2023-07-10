@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import ru.practicum.client.StatsClient;
 import ru.practicum.common.structures.ViewStats;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class StatsService {
         });
     }
 
-    public void addHit(HttpServletRequest request) {
-        statisticsClient.addHit(appName, request.getRemoteAddr(), request.getRequestURI(), LocalDateTime.now());
+    public void addHit(String remoteAddr, String requestURI) {
+        statisticsClient.addHit(appName, remoteAddr, requestURI, LocalDateTime.now());
     }
 }
