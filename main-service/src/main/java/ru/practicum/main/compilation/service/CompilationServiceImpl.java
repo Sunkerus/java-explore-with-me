@@ -15,6 +15,7 @@ import ru.practicum.main.event.dto.EventShortDto;
 import ru.practicum.main.event.dto.mappers.EventMapper;
 import ru.practicum.main.event.enums.RequestStatus;
 import ru.practicum.main.event.model.Event;
+import ru.practicum.main.event.model.Request;
 import ru.practicum.main.event.repository.EventRepository;
 import ru.practicum.main.event.repository.RequestRepository;
 import ru.practicum.main.exeption.NotFoundException;
@@ -159,9 +160,25 @@ public class CompilationServiceImpl implements CompilationService {
         List<Event> events = eventRepository.findAllByIdIn(eventIds);
         Map<Long, Long> views = getMapOfShowContext(events);
 
+
+        List<Request> requests = requestRepository.findByStatusAndEvent_IdIn(RequestStatus.CONFIRMED,
+                eventIds);
+
+        Map<Long, Long> confirmedRequests = new HashMap<>();
+
+        for (Request request : requests) {
+            long value;
+            if (confirmedRequests.containsKey(request.getEvent().getId())) {
+                value = confirmedRequests.get(request.getEvent().getId()) + 1L;
+            } else {
+                value = 1L;
+            }
+            confirmedRequests.put(request.getEvent().getId(), value);
+        }
+
         return events.stream()
                 .map(event -> EventMapper.toShortDto(event, views.getOrDefault(event.getId(), 0L),
-                        requestRepository.countByEventIdAndStatus(event.getId(), RequestStatus.CONFIRMED).intValue())).collect(Collectors.toList());
+                        confirmedRequests.getOrDefault(event.getId(), 0L).intValue())).collect(Collectors.toList());
     }
 
     private Map<Long, Long> getMapOfShowContext(List<Event> events) {

@@ -26,7 +26,7 @@ public class PublicEventController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto getEventByIdViaPublic(@PathVariable Long id, HttpServletRequest request) {
-        return eventService.getEventAsPublicById(id, request);
+        return eventService.getEventAsPublicById(id, request.getRemoteAddr(), request.getRequestURI());
     }
 
     @GetMapping
@@ -42,7 +42,7 @@ public class PublicEventController {
             @RequestParam(defaultValue = "0") int from,
             @RequestParam(defaultValue = "10") int size,
             HttpServletRequest request) {
-        return eventService.getAllEventsAsPublic(request, from, size,
+        return eventService.getAllEventsAsPublic(request.getRemoteAddr(), request.getRequestURI(), from, size,
                 EventRequest.of(
                         text,
                         categories,

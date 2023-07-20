@@ -19,6 +19,7 @@ import ru.practicum.main.event.enums.RequestStatus;
 import ru.practicum.main.event.model.Event;
 import ru.practicum.main.event.model.Location;
 import ru.practicum.main.event.model.QEvent;
+import ru.practicum.main.event.model.Request;
 import ru.practicum.main.event.repository.EventRepository;
 import ru.practicum.main.event.repository.LocationRepository;
 import ru.practicum.main.event.repository.RequestRepository;
@@ -31,7 +32,6 @@ import ru.practicum.main.statistic.StatsService;
 import ru.practicum.main.user.model.User;
 import ru.practicum.main.user.repository.UserRepository;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -57,7 +57,7 @@ public class EventServiceImpl implements EventService {
     private final StatsService statsService;
 
     @Override
-    public List<EventShortDto> getAllEventsAsPublic(HttpServletRequest httpServletRequest, Integer from, Integer size, EventRequest req) {
+    public List<EventShortDto> getAllEventsAsPublic(String ip, String uri, Integer from, Integer size, EventRequest req) {
         validationRangeTime(req.getRangeStart(), req.getRangeEnd());
         Predicate pred = QPredicates.build()
                 .add(QEvent.event.state.eq(EventState.PUBLISHED))
@@ -81,7 +81,7 @@ public class EventServiceImpl implements EventService {
             FurtherPageRequest pageRequest = new FurtherPageRequest(from, size, Sort.by("eventDate"));
             events = eventRepository.findAll(pred, pageRequest).getContent();
             views = getMapOfShowContext(events);
-            statsService.addHit(httpServletRequest.getRemoteAddr(), httpServletRequest.getRequestURI());
+            statsService.addHit(ip, uri);
             return events.stream().map(event ->
                             EventMapper.toShortDto(event, views.getOrDefault(event.getId(), 0L),
                                     requestRepository.countByEventIdAndStatus(event.getId(), RequestStatus.CONFIRMED).intValue()))
@@ -90,7 +90,7 @@ public class EventServiceImpl implements EventService {
 
         events = eventRepository.findAll(pred, new FurtherPageRequest(from, size)).getContent();
         views = getMapOfShowContext(events);
-        statsService.addHit(httpServletRequest.getRemoteAddr(), httpServletRequest.getRequestURI());
+        statsService.addHit(ip, uri);
 
         List<EventShortDto> eventShortDtos = events.stream()
                 .map(event ->
@@ -114,10 +114,25 @@ public class EventServiceImpl implements EventService {
 
         List<Event> events = eventRepository.findByInitiatorId(userId, page);
         Map<Long, Long> views = getMapOfShowContext(events);
-        return events.stream().map(event ->
-                        EventMapper.toShortDto(event, views.getOrDefault(event.getId(), 0L),
-                                requestRepository.countByEventIdAndStatus(event.getId(), RequestStatus.CONFIRMED).intValue()))
-                .collect(Collectors.toList());
+
+        List<Request> requests = requestRepository.findByStatusAndEvent_IdIn(RequestStatus.CONFIRMED,
+                events.stream().map(Event::getId).collect(Collectors.toSet()));
+
+        Map<Long, Long> confirmedRequests = new HashMap<>();
+
+        for (Request request : requests) {
+            long value;
+            if (confirmedRequests.containsKey(request.getEvent().getId())) {
+                value = confirmedRequests.get(request.getEvent().getId()) + 1L;
+            } else {
+                value = 1L;
+            }
+            confirmedRequests.put(request.getEvent().getId(), value);
+        }
+
+        return events.stream()
+                .map(event -> EventMapper.toShortDto(event, views.getOrDefault(event.getId(), 0L),
+                        confirmedRequests.getOrDefault(event.getId(), 0L).intValue())).collect(Collectors.toList());
     }
 
     @Override
@@ -333,11 +348,11 @@ public class EventServiceImpl implements EventService {
 
 
     @Override
-    public EventFullDto getEventAsPublicById(Long id, HttpServletRequest request) {
+    public EventFullDto getEventAsPublicById(Long id, String ip, String uri) {
         Event event = eventRepository.findByIdAndState(id, EventState.PUBLISHED)
                 .orElseThrow(() -> new NotFoundException(String.format("Event with id=%d was not found", id)));
 
-        statsService.addHit(request.getRemoteAddr(), request.getRequestURI());
+        statsService.addHit(ip, uri);
         return EventMapper.toFullDto(event, getMapOfShowContext(List.of(event)).getOrDefault(event.getId(), 0L),
                 requestRepository.countByEventIdAndStatus(event.getId(), RequestStatus.CONFIRMED).intValue());
     }

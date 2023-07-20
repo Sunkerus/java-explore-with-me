@@ -20,12 +20,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    @Override
-    public CategoryRepository getCategoryRepository() {
-        return this.categoryRepository;
-    }
-
-
     @Transactional
     @Override
     public CategoryDto createCategoryAsAdmin(NewCategoryDto newCategoryDto) {

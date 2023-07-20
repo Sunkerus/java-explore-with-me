@@ -3,13 +3,12 @@ package ru.practicum.main.event.service;
 import org.springframework.data.domain.Pageable;
 import ru.practicum.main.event.dto.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.List;
 
 public interface EventService {
 
-    Collection<EventShortDto> getAllEventsAsPublic(HttpServletRequest httpServletRequest, Integer from, Integer size, EventRequest req);
+    Collection<EventShortDto> getAllEventsAsPublic(String ip, String uri, Integer from, Integer size, EventRequest req);
 
     List<EventShortDto> getAllEventsByUserId(Long userId, Pageable page);
 
@@ -23,7 +22,7 @@ public interface EventService {
 
     EventFullDto creatingEventByUser(NewEventDto newEventDto, Long userId);
 
-    EventFullDto getEventAsPublicById(Long id, HttpServletRequest requestURI);
+    EventFullDto getEventAsPublicById(Long id, String ip, String uri);
 }
 
 
