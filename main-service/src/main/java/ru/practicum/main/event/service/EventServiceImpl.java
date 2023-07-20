@@ -92,11 +92,26 @@ public class EventServiceImpl implements EventService {
         views = getMapOfShowContext(events);
         statsService.addHit(ip, uri);
 
+        List<Request> requests = requestRepository.findByStatusAndEvent_IdIn(RequestStatus.CONFIRMED,
+                events.stream().map(Event::getId).collect(Collectors.toSet()));
+
+        Map<Long, Integer> confirmedRequests = new HashMap<>();
+
+        for (Request request : requests) {
+            int value;
+            if (confirmedRequests.containsKey(request.getEvent().getId())) {
+                value = confirmedRequests.get(request.getEvent().getId()) + 1;
+            } else {
+                value = 1;
+            }
+            confirmedRequests.put(request.getEvent().getId(), value);
+        }
+
+
         List<EventShortDto> eventShortDtos = events.stream()
                 .map(event ->
                         EventMapper.toShortDto(event, views.getOrDefault(event.getId(), 0L),
-                                requestRepository.countByEventIdAndStatus(event.getId(), RequestStatus.CONFIRMED).intValue()))
-                .collect(Collectors.toList());
+                                        confirmedRequests.getOrDefault(event.getId(),0))).collect(Collectors.toList());
 
         if (EventSortType.VIEWS.equals(req.getSort()) && !views.isEmpty()) {
             return eventShortDtos.stream().sorted(Comparator.comparing(EventShortDto::getViews).reversed()).collect(Collectors.toList());
