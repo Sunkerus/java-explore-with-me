@@ -8,6 +8,7 @@ import ru.practicum.main.event.dto.EventFullDto;
 import ru.practicum.main.event.dto.EventRequest;
 import ru.practicum.main.event.dto.EventShortDto;
 import ru.practicum.main.event.enums.EventSortType;
+import ru.practicum.main.event.service.CommentService;
 import ru.practicum.main.event.service.EventService;
 import ru.practicum.main.helper.DTFormatter;
 
@@ -22,6 +23,8 @@ import java.util.List;
 public class PublicEventController {
 
     private final EventService eventService;
+
+    private final CommentService commentService;
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -52,5 +55,6 @@ public class PublicEventController {
                         onlyAvailable,
                         sort));
     }
+
 
 }

@@ -111,7 +111,7 @@ public class EventServiceImpl implements EventService {
         List<EventShortDto> eventShortDtos = events.stream()
                 .map(event ->
                         EventMapper.toShortDto(event, views.getOrDefault(event.getId(), 0L),
-                                        confirmedRequests.getOrDefault(event.getId(),0))).collect(Collectors.toList());
+                                confirmedRequests.getOrDefault(event.getId(), 0))).collect(Collectors.toList());
 
         if (EventSortType.VIEWS.equals(req.getSort()) && !views.isEmpty()) {
             return eventShortDtos.stream().sorted(Comparator.comparing(EventShortDto::getViews).reversed()).collect(Collectors.toList());
