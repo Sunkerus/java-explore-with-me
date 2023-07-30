@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "d23985dd-d6ff-4341-9bfc-3f7bd59595ad",
+		"_postman_id": "9779c650-e741-4b03-958d-59b9d5e532b8",
 		"name": "feature_comments",
 		"description": "Testing **private**, **admin** and **public** controllers and function also **test errors** for that things.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -1755,7 +1755,7 @@
 									"    pm.response.to.be.withBody;\r",
 									"    pm.response.to.be.json;\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.length, 'List length must be 2').to.eql(2);\r",
+									"    pm.expect(jsonData.length, 'List length must be 3').to.eql(3);\r",
 									"});\r",
 									""
 								],
