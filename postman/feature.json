@@ -1685,7 +1685,7 @@
 									"    pm.response.to.be.withBody;\r",
 									"    pm.response.to.be.json;\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.length, 'List length must be 2').to.eql(2);\r",
+									"    pm.expect(jsonData.length, 'List length must be 1').to.eql(1);\r",
 									"});\r",
 									""
 								],
@@ -1697,7 +1697,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/comments?eventId&text=coMme&authorName=&rangeStart&rangeEnd&from&size",
+							"raw": "http://localhost:8080/comments?eventId&text=first&authorName=&rangeStart&rangeEnd&from&size",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1713,7 +1713,7 @@
 								},
 								{
 									"key": "text",
-									"value": "coMme"
+									"value": "first"
 								},
 								{
 									"key": "authorName",
