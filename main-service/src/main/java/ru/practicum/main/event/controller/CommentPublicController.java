@@ -24,7 +24,7 @@ public class CommentPublicController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<CommentDto> getAllCommentsViaPublic(
+    public List<CommentDto> getAllCommentsAsPublic(
             @RequestParam(required = false) Long eventId,
             @RequestParam(defaultValue = "") String text,
             @RequestParam(defaultValue = "") String authorName,
@@ -32,7 +32,7 @@ public class CommentPublicController {
             @RequestParam(required = false) @DateTimeFormat(pattern = DTFormatter.YYYY_MM_DD_HH_MM_SS) LocalDateTime rangeEnd,
             @RequestParam(defaultValue = "0") @Min(0) int from,
             @RequestParam(defaultValue = "10") @Min(1) int size) {
-        return commentService.getAllCommentsViaPublic(
+        return commentService.getAllCommentsAsPublic(
                 eventId,
                 text,
                 authorName,
@@ -42,7 +42,7 @@ public class CommentPublicController {
 
     @GetMapping("/{commentId}")
     @ResponseStatus(HttpStatus.OK)
-    public CommentDto getCommentByIdViaPublic(@PathVariable Long commentId) {
-        return commentService.getCommentByIdViaPublic(commentId);
+    public CommentDto getCommentByIdAsPublic(@PathVariable Long commentId) {
+        return commentService.getCommentByIdAsPublic(commentId);
     }
 }

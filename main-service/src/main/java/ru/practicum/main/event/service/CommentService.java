@@ -2,23 +2,23 @@ package ru.practicum.main.event.service;
 
 import org.springframework.data.domain.Pageable;
 import ru.practicum.main.event.dto.CommentDto;
-import ru.practicum.main.event.dto.CommentIncomeDto;
 import ru.practicum.main.event.dto.CommentFullDto;
+import ru.practicum.main.event.dto.CommentIncomeDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public interface CommentService {
 
-    CommentDto postCommentViaPrivate(CommentIncomeDto newCommentDto, Long userId, Long eventId);
+    CommentDto postCommentAsPrivate(CommentIncomeDto newCommentDto, Long userId, Long eventId);
 
-    CommentDto patchCommentViaPrivate(CommentIncomeDto newCommentDto, Long userId, Long eventId, Long commentId);
+    CommentDto patchCommentAsPrivate(CommentIncomeDto newCommentDto, Long userId, Long eventId, Long commentId);
 
-    void deleteCommentViaPrivate(Long userId, Long eventId, Long commentId);
+    void deleteCommentAsPrivate(Long userId, Long eventId, Long commentId);
 
-    CommentDto getCommentViaPrivate(Long authorId, Long commentId);
+    CommentDto getCommentAsPrivate(Long authorId, Long commentId);
 
-    List<CommentDto> getAllOwnerCommentsViaPrivate(
+    List<CommentDto> getAllOwnerCommentsAsPrivate(
             Long authorId,
             Long eventId,
             String text,
@@ -26,26 +26,26 @@ public interface CommentService {
             LocalDateTime rangeEnd,
             Pageable page);
 
-    List<CommentDto> getAllCommentsViaPublic(
+    List<CommentDto> getAllCommentsAsPublic(
             Long eventId,
             String text,
             String authorName,
             LocalDateTime rangeStart, LocalDateTime rangeEnd,
             Pageable page);
 
-    CommentDto getCommentByIdViaPublic(Long commentId);
+    CommentDto getCommentByIdAsPublic(Long commentId);
 
-    CommentFullDto patchCommentViaAdmin(CommentIncomeDto commentIncomeDto, Long commentId, Long eventId);
+    CommentFullDto patchCommentAsAdmin(CommentIncomeDto commentIncomeDto, Long commentId, Long eventId);
 
-    CommentFullDto getCommentViaAdmin(Long commentId);
+    CommentFullDto getCommentAsAdmin(Long commentId);
 
-    List<CommentFullDto> getAllCommentsViaAdmin(
+    List<CommentFullDto> getAllCommentsAsAdmin(
             Long eventId,
             Long authorId,
             String text,
             LocalDateTime rangeStart, LocalDateTime rangeEnd,
             Pageable page);
 
-    void deleteCommentViaAdmin(Long commentId);
+    void deleteCommentAsAdmin(Long commentId);
 
 }

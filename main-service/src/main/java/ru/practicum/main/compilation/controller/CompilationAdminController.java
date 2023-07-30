@@ -20,7 +20,7 @@ public class CompilationAdminController {
 
     @PatchMapping("/{compId}")
     @ResponseStatus(HttpStatus.OK)
-    public CompilationDto patchCompilationViaAdmin(
+    public CompilationDto patchCompilationAsAdmin(
             @Valid @RequestBody CompilationRequest compilationRequest,
             @PathVariable Long compId) {
         return compilationService.patchCompilationAsAdmin(compilationRequest, compId);
@@ -28,13 +28,13 @@ public class CompilationAdminController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CompilationDto createCompilationViaAdmin(@Valid @RequestBody NewCompilationDto newCompilationDto) {
+    public CompilationDto createCompilationAsAdmin(@Valid @RequestBody NewCompilationDto newCompilationDto) {
         return compilationService.createCompilationAsAdmin(newCompilationDto);
     }
 
     @DeleteMapping("/{compId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCompilationByIdViaAdmin(@PathVariable Long compId) {
+    public void deleteCompilationByIdAsAdmin(@PathVariable Long compId) {
         compilationService.deleteCompilationAsAdmin(compId);
     }
 

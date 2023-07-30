@@ -24,12 +24,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDto createUserViaAdmin(NewUserRequest newUserRequest) {
+    public UserDto createUserAsAdmin(NewUserRequest newUserRequest) {
         return UserMapper.toUserDto(userRepository.save(UserMapper.toUser(newUserRequest)));
     }
 
     @Override
-    public List<UserDto> getAllUsersViaAdmin(List<Long> ids, int from, int size) {
+    public List<UserDto> getAllUsersAsAdmin(List<Long> ids, int from, int size) {
         if (ids == null || ids.isEmpty()) {
             return UserMapper.toUserDto(userRepository.findAll(new FurtherPageRequest(from, size)));
         }
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void deleteUserViaAdminById(Long userId) {
+    public void deleteUserAsAdminById(Long userId) {
         getUserById(userId);
         userRepository.deleteById(userId);
     }

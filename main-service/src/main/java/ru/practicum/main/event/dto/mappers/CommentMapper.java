@@ -2,8 +2,8 @@ package ru.practicum.main.event.dto.mappers;
 
 import lombok.experimental.UtilityClass;
 import ru.practicum.main.event.dto.CommentDto;
-import ru.practicum.main.event.dto.CommentIncomeDto;
 import ru.practicum.main.event.dto.CommentFullDto;
+import ru.practicum.main.event.dto.CommentIncomeDto;
 import ru.practicum.main.event.enums.CommentState;
 import ru.practicum.main.event.model.Comment;
 import ru.practicum.main.event.model.Event;

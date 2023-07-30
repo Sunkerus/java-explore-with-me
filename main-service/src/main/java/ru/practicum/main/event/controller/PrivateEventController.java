@@ -72,26 +72,26 @@ public class PrivateEventController {
 
     @PostMapping("/{eventId}/comments")
     @ResponseStatus(HttpStatus.CREATED)
-    public CommentDto postCommentViaPrivet(
+    public CommentDto postCommentAsPrivet(
             @RequestBody @Valid CommentIncomeDto newCommentDto,
             @PathVariable Long userId,
             @PathVariable Long eventId) {
-        return commentService.postCommentViaPrivate(newCommentDto, userId, eventId);
+        return commentService.postCommentAsPrivate(newCommentDto, userId, eventId);
     }
 
     @PatchMapping("/{eventId}/comments/{commentId}")
     @ResponseStatus(HttpStatus.OK)
-    public CommentDto patchCommentViaPrivet(
+    public CommentDto patchCommentAsPrivet(
             @RequestBody @Valid CommentIncomeDto newCommentDto,
             @PathVariable Long userId,
             @PathVariable Long eventId,
             @PathVariable Long commentId) {
-        return commentService.patchCommentViaPrivate(newCommentDto, userId, eventId, commentId);
+        return commentService.patchCommentAsPrivate(newCommentDto, userId, eventId, commentId);
     }
 
     @DeleteMapping("/{eventId}/comments/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCommentViaPrivate(@PathVariable Long userId, @PathVariable Long eventId, @PathVariable Long commentId) {
-        commentService.deleteCommentViaPrivate(userId, eventId, commentId);
+    public void deleteCommentAsPrivate(@PathVariable Long userId, @PathVariable Long eventId, @PathVariable Long commentId) {
+        commentService.deleteCommentAsPrivate(userId, eventId, commentId);
     }
 }

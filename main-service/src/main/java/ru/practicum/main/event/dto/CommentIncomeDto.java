@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class CommentIncomeDto {
 
-    @Size(min = 3, max = 2047, message = "rSize of comment must be between 3 and 2047 symbols")
+    @Size(min = 3, max = 2047, message = "Size of comment must be between 3 and 2047 symbols")
     @NotBlank(message = "Comment cannot be blank")
     private String text;
 }

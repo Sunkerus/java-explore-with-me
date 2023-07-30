@@ -32,8 +32,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
@@ -46,7 +46,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public CommentDto postCommentViaPrivate(CommentIncomeDto commentIncomeDto, Long userId, Long eventId) {
+    public CommentDto postCommentAsPrivate(CommentIncomeDto commentIncomeDto, Long userId, Long eventId) {
         User user = userRepository.findById(userId).orElseThrow(() -> {
             throw new NotFoundException(String.format("Cannot found user with id: %d", userId));
         });
@@ -56,14 +56,14 @@ public class CommentServiceImpl implements CommentService {
                 });
 
         if (!EventState.PUBLISHED.equals(event.getState())) {
-            throw new BadRequest("Comment cannot be write to  unpublished event");
+            throw new BadRequest("Comment cannot be write to unpublished event");
         }
         return CommentMapper.toCommentDto(commentRepository.save(CommentMapper.toComment(commentIncomeDto, user, event)));
     }
 
     @Override
     @Transactional
-    public CommentDto patchCommentViaPrivate(CommentIncomeDto commentIncomeDto, Long userId, Long eventId, Long commentId) {
+    public CommentDto patchCommentAsPrivate(CommentIncomeDto commentIncomeDto, Long userId, Long eventId, Long commentId) {
 
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException(String.format("User with id: %d was not found", userId));
@@ -73,13 +73,18 @@ public class CommentServiceImpl implements CommentService {
             throw new NotFoundException(String.format("Comment with this id: %d cannot found", eventId));
         }
 
-        Comment comment = commentRepository.findById(eventId).orElseThrow(() -> {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> {
             throw new NotFoundException(String.format("Comment with this id: %d cannot found", eventId));
         });
 
         if (!comment.getEvent().getId().equals(eventId)) {
             throw new ConflictException(String.format(
                     "The comment with id: %d doesn't belong to event wit id=%d", comment.getEvent().getId(), eventId));
+        }
+
+        if (!comment.getAuthor().getId().equals(userId)) {
+            throw new ConflictException(String.format(
+                    "The comment with id: %d doesn't belong to event wit id=%d", comment.getAuthor().getId(), eventId));
         }
 
         comment.setState(CommentState.EDITED);
@@ -90,7 +95,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void deleteCommentViaPrivate(Long userId, Long eventId, Long commentId) {
+    public void deleteCommentAsPrivate(Long userId, Long eventId, Long commentId) {
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException(String.format("User with id:%d was not found", userId));
         }
@@ -98,11 +103,20 @@ public class CommentServiceImpl implements CommentService {
         if (!eventRepository.existsById(eventId)) {
             throw new NotFoundException(String.format("Comment with this id: %d cannot found", eventId));
         }
+
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> {
+            throw new NotFoundException(String.format("Comment with this id: %dcommentId cannot found", commentId));
+        });
+        if (!userId.equals(comment.getAuthor().getId())) {
+            throw new ConflictException(
+                    String.format("The user with id=%d cannot %s comment as he/she didn't leave it.", userId, comment.getText()));
+        }
+
         commentRepository.deleteById(commentId);
     }
 
     @Override
-    public CommentDto getCommentViaPrivate(Long authorId, Long commentId) {
+    public CommentDto getCommentAsPrivate(Long authorId, Long commentId) {
 
         if (!userRepository.existsById(authorId)) {
             throw new NotFoundException(String.format("User with id:%d was not found", authorId));
@@ -115,7 +129,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentDto> getAllOwnerCommentsViaPrivate(
+    public List<CommentDto> getAllOwnerCommentsAsPrivate(
             Long authorId,
             Long eventId,
             String text,
@@ -137,7 +151,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentDto> getAllCommentsViaPublic(
+    public List<CommentDto> getAllCommentsAsPublic(
             Long eventId,
             String text,
             String authorName,
@@ -161,14 +175,14 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDto getCommentByIdViaPublic(Long commentId) {
+    public CommentDto getCommentByIdAsPublic(Long commentId) {
         return CommentMapper.toCommentDto(commentRepository.findById(commentId).orElseThrow(() -> new NotFoundException(
                 String.format("Cannot find comment by id: %d", commentId))));
     }
 
     @Override
     @Transactional
-    public CommentFullDto patchCommentViaAdmin(CommentIncomeDto commentIncomeDto, Long commentId, Long eventId) {
+    public CommentFullDto patchCommentAsAdmin(CommentIncomeDto commentIncomeDto, Long commentId, Long eventId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new NotFoundException(String.format(
                 "Cannot find comment by id: %d", commentId)));
 
@@ -188,7 +202,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentFullDto getCommentViaAdmin(Long commentId) {
+    public CommentFullDto getCommentAsAdmin(Long commentId) {
 
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> {
             throw new NotFoundException(String.format("Comment with this id: %d cannot found", commentId));
@@ -199,7 +213,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentFullDto> getAllCommentsViaAdmin(
+    public List<CommentFullDto> getAllCommentsAsAdmin(
             Long eventId,
             Long authorId,
             String text,
@@ -249,9 +263,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void deleteCommentViaAdmin(Long commentId) {
+    public void deleteCommentAsAdmin(Long commentId) {
 
-        if (commentRepository.existsById(commentId)) {
+        if (!commentRepository.existsById(commentId)) {
             throw new NotFoundException(String.format("Comment with id: %d cannot found and delete", commentId));
         }
 

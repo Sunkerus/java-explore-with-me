@@ -5,8 +5,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.main.event.dto.CommentIncomeDto;
 import ru.practicum.main.event.dto.CommentFullDto;
+import ru.practicum.main.event.dto.CommentIncomeDto;
 import ru.practicum.main.event.service.CommentService;
 import ru.practicum.main.helper.DTFormatter;
 import ru.practicum.main.helper.FurtherPageRequest;
@@ -26,13 +26,13 @@ public class CommentAdminController {
 
     @GetMapping("/{commentId}")
     @ResponseStatus(HttpStatus.OK)
-    public CommentFullDto getCommentViaAdmin(@PathVariable Long commentId) {
-        return commentService.getCommentViaAdmin(commentId);
+    public CommentFullDto getCommentAsAdmin(@PathVariable Long commentId) {
+        return commentService.getCommentAsAdmin(commentId);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<CommentFullDto> getAllCommentsViaAdmin(
+    public List<CommentFullDto> getAllCommentsAsAdmin(
             @RequestParam(required = false) Long eventId,
             @RequestParam(required = false) Long authorId,
             @RequestParam(defaultValue = "") String text,
@@ -40,7 +40,7 @@ public class CommentAdminController {
             @RequestParam(required = false) @DateTimeFormat(pattern = DTFormatter.YYYY_MM_DD_HH_MM_SS) LocalDateTime rangeEnd,
             @RequestParam(defaultValue = "0") @Min(0) int from,
             @RequestParam(defaultValue = "10") @Min(1) int size) {
-        return commentService.getAllCommentsViaAdmin(
+        return commentService.getAllCommentsAsAdmin(
                 eventId,
                 authorId,
                 text,
@@ -51,17 +51,17 @@ public class CommentAdminController {
 
     @PatchMapping("/{commentId}")
     @ResponseStatus(HttpStatus.OK)
-    public CommentFullDto patchCommentViaAdmin(
+    public CommentFullDto patchCommentAsAdmin(
             @RequestBody @Valid CommentIncomeDto commentIncomeDto,
             @PathVariable Long commentId,
             @RequestParam Long eventId) {
-        return commentService.patchCommentViaAdmin(commentIncomeDto, commentId, eventId);
+        return commentService.patchCommentAsAdmin(commentIncomeDto, commentId, eventId);
     }
 
     @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCommentViaAdmin(@PathVariable Long commentId) {
-        commentService.deleteCommentViaAdmin(commentId);
+    public void deleteCommentAsAdmin(@PathVariable Long commentId) {
+        commentService.deleteCommentAsAdmin(commentId);
     }
 
 
