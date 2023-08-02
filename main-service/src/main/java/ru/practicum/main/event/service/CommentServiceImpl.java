@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.main.event.dto.CommentDto;
 import ru.practicum.main.event.dto.CommentFullDto;
-import ru.practicum.main.event.dto.CommentIncomeDto;
+import ru.practicum.main.event.dto.CommentIncomingDto;
 import ru.practicum.main.event.dto.mappers.CommentMapper;
 import ru.practicum.main.event.enums.CommentState;
 import ru.practicum.main.event.enums.EventState;
@@ -46,24 +46,25 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public CommentDto postCommentAsPrivate(CommentIncomeDto commentIncomeDto, Long userId, Long eventId) {
+    public CommentDto postCommentAsPrivate(CommentIncomingDto commentIncomingDto, Long userId, Long eventId) {
         User user = userRepository.findById(userId).orElseThrow(() -> {
             throw new NotFoundException(String.format("Cannot found user with id: %d", userId));
         });
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> {
-                    throw new NotFoundException(String.format("Comment with this id: %d cannot found", eventId));
+                    throw new NotFoundException(String.format("Event with this id: %d cannot found", eventId));
                 });
 
         if (!EventState.PUBLISHED.equals(event.getState())) {
             throw new BadRequest("Comment cannot be write to unpublished event");
         }
-        return CommentMapper.toCommentDto(commentRepository.save(CommentMapper.toComment(commentIncomeDto, user, event)));
+
+        return CommentMapper.toCommentDto(commentRepository.save(CommentMapper.toComment(commentIncomingDto, user, event)));
     }
 
     @Override
     @Transactional
-    public CommentDto patchCommentAsPrivate(CommentIncomeDto commentIncomeDto, Long userId, Long eventId, Long commentId) {
+    public CommentDto patchCommentAsPrivate(CommentIncomingDto commentIncomingDto, Long userId, Long eventId, Long commentId) {
 
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException(String.format("User with id: %d was not found", userId));
@@ -88,7 +89,7 @@ public class CommentServiceImpl implements CommentService {
         }
 
         comment.setState(CommentState.EDITED);
-        comment.setText(commentIncomeDto.getText());
+        comment.setText(commentIncomingDto.getText());
 
         return CommentMapper.toCommentDto(comment);
     }
@@ -182,7 +183,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public CommentFullDto patchCommentAsAdmin(CommentIncomeDto commentIncomeDto, Long commentId, Long eventId) {
+    public CommentFullDto patchCommentAsAdmin(CommentIncomingDto commentIncomingDto, Long commentId, Long eventId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new NotFoundException(String.format(
                 "Cannot find comment by id: %d", commentId)));
 
@@ -195,7 +196,7 @@ public class CommentServiceImpl implements CommentService {
                     "The comment with id: %d doesn't belong to event wit id: %d", comment.getEvent().getId(), eventId));
         }
 
-        comment.setText(commentIncomeDto.getText());
+        comment.setText(commentIncomingDto.getText());
         comment.setState(CommentState.CHANGING_BY_ADMIN);
 
         return CommentMapper.toCommentFullDto(comment, requestRepository.countByEventIdAndStatus(eventId, RequestStatus.CONFIRMED).intValue());
@@ -230,29 +231,16 @@ public class CommentServiceImpl implements CommentService {
 
         if (pred != null) {
             comments = commentRepository.findAll(pred, page).toList();
-
-            mapStorage = requestRepository.findByStatusAndEvent_IdIn(RequestStatus.CONFIRMED, comments
-                            .stream()
-                            .map(Comment::getId)
-                            .collect(Collectors.toList())).stream()
-                    .collect(Collectors.groupingBy(Request::getEvent, Collectors.counting()));
-
-            return comments
-                    .stream()
-                    .map(comment ->
-                            CommentMapper.toCommentFullDto(comment,
-                                    mapStorage.getOrDefault(comment.getEvent(), 0L).intValue()))
-                    .collect(Collectors.toList());
         } else {
 
             comments = commentRepository.findAll(page).toList();
-
-            mapStorage = requestRepository.findByStatusAndEvent_IdIn(RequestStatus.CONFIRMED, comments
-                            .stream()
-                            .map(Comment::getId)
-                            .collect(Collectors.toList())).stream()
-                    .collect(Collectors.groupingBy(Request::getEvent, Collectors.counting()));
         }
+
+        mapStorage = requestRepository.findByStatusAndEvent_IdIn(RequestStatus.CONFIRMED, comments
+                        .stream()
+                        .map(Comment::getId)
+                        .collect(Collectors.toList())).stream()
+                .collect(Collectors.groupingBy(Request::getEvent, Collectors.counting()));
 
         return comments
                 .stream()

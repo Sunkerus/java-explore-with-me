@@ -3,7 +3,7 @@ package ru.practicum.main.event.dto.mappers;
 import lombok.experimental.UtilityClass;
 import ru.practicum.main.event.dto.CommentDto;
 import ru.practicum.main.event.dto.CommentFullDto;
-import ru.practicum.main.event.dto.CommentIncomeDto;
+import ru.practicum.main.event.dto.CommentIncomingDto;
 import ru.practicum.main.event.enums.CommentState;
 import ru.practicum.main.event.model.Comment;
 import ru.practicum.main.event.model.Event;
@@ -16,10 +16,10 @@ import java.time.LocalDateTime;
 @UtilityClass
 public class CommentMapper {
 
-    public Comment toComment(CommentIncomeDto commentIncomeDto, User user, Event event) {
+    public Comment toComment(CommentIncomingDto commentIncomingDto, User user, Event event) {
         return Comment.builder()
                 .author(user)
-                .text(commentIncomeDto.getText())
+                .text(commentIncomingDto.getText())
                 .created(LocalDateTime.now())
                 .event(event)
                 .state(CommentState.PUBLISHED)
@@ -30,7 +30,7 @@ public class CommentMapper {
         return CommentDto.builder()
                 .id(comment.getId())
                 .authorId(comment.getAuthor().getId())
-                .created(comment.getCreated().format(DTFormatter.DATE_TIME_FORMATTER))
+                .created(comment.getCreated())
                 .text(comment.getText())
                 .eventId(comment.getEvent().getId())
                 .state(comment.getState())

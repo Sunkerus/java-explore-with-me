@@ -3,16 +3,16 @@ package ru.practicum.main.event.service;
 import org.springframework.data.domain.Pageable;
 import ru.practicum.main.event.dto.CommentDto;
 import ru.practicum.main.event.dto.CommentFullDto;
-import ru.practicum.main.event.dto.CommentIncomeDto;
+import ru.practicum.main.event.dto.CommentIncomingDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public interface CommentService {
 
-    CommentDto postCommentAsPrivate(CommentIncomeDto newCommentDto, Long userId, Long eventId);
+    CommentDto postCommentAsPrivate(CommentIncomingDto newCommentDto, Long userId, Long eventId);
 
-    CommentDto patchCommentAsPrivate(CommentIncomeDto newCommentDto, Long userId, Long eventId, Long commentId);
+    CommentDto patchCommentAsPrivate(CommentIncomingDto newCommentDto, Long userId, Long eventId, Long commentId);
 
     void deleteCommentAsPrivate(Long userId, Long eventId, Long commentId);
 
@@ -35,7 +35,7 @@ public interface CommentService {
 
     CommentDto getCommentByIdAsPublic(Long commentId);
 
-    CommentFullDto patchCommentAsAdmin(CommentIncomeDto commentIncomeDto, Long commentId, Long eventId);
+    CommentFullDto patchCommentAsAdmin(CommentIncomingDto commentIncomingDto, Long commentId, Long eventId);
 
     CommentFullDto getCommentAsAdmin(Long commentId);
 

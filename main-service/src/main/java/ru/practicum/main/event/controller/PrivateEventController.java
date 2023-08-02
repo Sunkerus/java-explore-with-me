@@ -73,7 +73,7 @@ public class PrivateEventController {
     @PostMapping("/{eventId}/comments")
     @ResponseStatus(HttpStatus.CREATED)
     public CommentDto postCommentAsPrivet(
-            @RequestBody @Valid CommentIncomeDto newCommentDto,
+            @RequestBody @Valid CommentIncomingDto newCommentDto,
             @PathVariable Long userId,
             @PathVariable Long eventId) {
         return commentService.postCommentAsPrivate(newCommentDto, userId, eventId);
@@ -82,7 +82,7 @@ public class PrivateEventController {
     @PatchMapping("/{eventId}/comments/{commentId}")
     @ResponseStatus(HttpStatus.OK)
     public CommentDto patchCommentAsPrivet(
-            @RequestBody @Valid CommentIncomeDto newCommentDto,
+            @RequestBody @Valid CommentIncomingDto newCommentDto,
             @PathVariable Long userId,
             @PathVariable Long eventId,
             @PathVariable Long commentId) {

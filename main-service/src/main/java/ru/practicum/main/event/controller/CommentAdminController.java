@@ -6,7 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.main.event.dto.CommentFullDto;
-import ru.practicum.main.event.dto.CommentIncomeDto;
+import ru.practicum.main.event.dto.CommentIncomingDto;
 import ru.practicum.main.event.service.CommentService;
 import ru.practicum.main.helper.DTFormatter;
 import ru.practicum.main.helper.FurtherPageRequest;
@@ -52,10 +52,10 @@ public class CommentAdminController {
     @PatchMapping("/{commentId}")
     @ResponseStatus(HttpStatus.OK)
     public CommentFullDto patchCommentAsAdmin(
-            @RequestBody @Valid CommentIncomeDto commentIncomeDto,
+            @RequestBody @Valid CommentIncomingDto commentIncomingDto,
             @PathVariable Long commentId,
             @RequestParam Long eventId) {
-        return commentService.patchCommentAsAdmin(commentIncomeDto, commentId, eventId);
+        return commentService.patchCommentAsAdmin(commentIncomingDto, commentId, eventId);
     }
 
     @DeleteMapping("/{commentId}")
