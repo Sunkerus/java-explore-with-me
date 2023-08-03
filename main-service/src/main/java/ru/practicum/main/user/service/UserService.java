@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface UserService {
 
-    UserDto createUserViaAdmin(NewUserRequest newUserRequest);
+    UserDto createUserAsAdmin(NewUserRequest newUserRequest);
 
-    List<UserDto> getAllUsersViaAdmin(List<Long> ids, int from, int size);
+    List<UserDto> getAllUsersAsAdmin(List<Long> ids, int from, int size);
 
-    void deleteUserViaAdminById(Long userId);
+    void deleteUserAsAdminById(Long userId);
 
     User getUserById(Long userId);
 

@@ -19,22 +19,22 @@ public class UserAdminController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<UserDto> getAllUsersViaAdmin(
+    public List<UserDto> getAllUsersAsAdmin(
             @RequestParam(required = false) List<Long> ids,
             @RequestParam(defaultValue = "0") int from,
             @RequestParam(defaultValue = "10") int size) {
-        return userService.getAllUsersViaAdmin(ids, from, size);
+        return userService.getAllUsersAsAdmin(ids, from, size);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto createUserViaAdmin(@Valid @RequestBody NewUserRequest newUserRequest) {
-        return userService.createUserViaAdmin(newUserRequest);
+    public UserDto createUserAsAdmin(@Valid @RequestBody NewUserRequest newUserRequest) {
+        return userService.createUserAsAdmin(newUserRequest);
     }
 
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUserViaAdmin(@PathVariable Long userId) {
-        userService.deleteUserViaAdminById(userId);
+    public void deleteUserAsAdmin(@PathVariable Long userId) {
+        userService.deleteUserAsAdminById(userId);
     }
 }
